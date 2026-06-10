@@ -17,7 +17,8 @@ export function Layout() {
   return (
     <div className="min-h-screen flex flex-col selection:bg-rose/30 selection:text-black">
       {/* Navigation */}
-        <header className="sticky top-0 z-50 w-full bg-cream backdrop-blur-md border-b border-rose/10 transition-all duration-300">        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-[1000] w-full bg-cream border-b border-rose/10 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <Link to="/" className="text-2xl font-serif text-black hover:opacity-80 transition-opacity">
               Deedees Glam
@@ -46,7 +47,7 @@ export function Layout() {
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2 text-black"
+              className="md:hidden p-2 text-black z-[1001] relative"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -56,7 +57,7 @@ export function Layout() {
 
         {/* Mobile Nav Overlay */}
         {mobileMenuOpen && (
-          <div className="fixed inset-0 top-20 bg-cream z-40 flex flex-col p-6 animate-in fade-in slide-in-from-top-4 duration-300 md:hidden">
+          <div className="fixed inset-0 top-20 bg-cream z-[999] flex flex-col p-6 md:hidden">
             <nav className="flex flex-col gap-6 items-center pt-10">
               {navLinks.map((link) => (
                 <Link
@@ -155,7 +156,7 @@ export function Layout() {
 
           <div className="mt-16 pt-8 border-t border-cream/10 text-center flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-cream/50 text-sm">
-              © {new Date().getFullYear()} Jinie Tech for Deedees Glam. All rights reserved.
+              © {new Date().getFullYear()} Deedees Glam. All rights reserved.
             </p>
           </div>
         </div>
