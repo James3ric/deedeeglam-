@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 import { motion } from "motion/react";
 
-import birthdayImg from "../../imports/soft_glam_2.jpeg";
-import bridalImg from "../../imports/full_glam.jpeg";
-import partyImg from "../../imports/full_glam_2.jpeg";
-import browsImg from "../../imports/brow.jpeg";
+import birthdayImg from "../../imports/soft_glam/soft_glam_2.jpeg";
+import bridalImg from "../../imports/full_glam/full_glam.jpeg";
+import partyImg from "../../imports/full_glam/full_glam_2.jpeg";
+import browsImg from "../../imports/brows/brow.jpeg";
 
 export function Services() {
   const hairImg = "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYWlyJTIwc3R5bGluZ3xlbnwxfHx8fDE3NzgwMDAyNjR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral";
