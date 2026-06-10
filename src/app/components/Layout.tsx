@@ -17,8 +17,7 @@ export function Layout() {
   return (
     <div className="min-h-screen flex flex-col selection:bg-rose/30 selection:text-black">
       {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full bg-cream/90 backdrop-blur-md border-b border-rose/10 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-50 w-full bg-cream backdrop-blur-md border-b border-rose/10 transition-all duration-300">        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <Link to="/" className="text-2xl font-serif text-black hover:opacity-80 transition-opacity">
               Deedees Glam
