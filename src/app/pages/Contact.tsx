@@ -12,13 +12,19 @@ export function Contact() {
     message: ""
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // Normally would send data to backend here
-    setTimeout(() => {
-      setIsSubmitted(false);
+    setIsLoading(true);
+    try {
+      const form = e.target as HTMLFormElement;
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(form) as any).toString(),
+      });
+      setIsSubmitted(true);
       setFormData({
         name: "",
         email: "",
@@ -26,13 +32,17 @@ export function Contact() {
         service: "General Enquiry",
         message: ""
       });
-    }, 5000);
+    } catch (error) {
+      console.error("Form submission error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="bg-cream min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-24">
-        
+
         {/* Header */}
         <div className="text-center mb-24">
           <h1 className="text-5xl md:text-7xl font-serif text-black mb-6">Get in Touch</h1>
@@ -44,38 +54,60 @@ export function Contact() {
 
         {/* Content Split */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-32">
-          
+
           {/* Left Column - Form */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-black/5 relative overflow-hidden"
           >
             {isSubmitted ? (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 backdrop-blur z-10 text-center p-8"
+                className="absolute inset-0 flex flex-col items-center justify-center bg-white z-10 text-center p-8"
               >
                 <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
                   <Mail className="w-8 h-8" />
                 </div>
                 <h3 className="text-3xl font-serif text-black mb-4">Message Sent!</h3>
-                <p className="text-black/60">
-                  Thank you for reaching out. We will get back to you as soon as possible.
+                <p className="text-black/60 mb-8">
+                  Thank you for reaching out. Priscilla will get back to you as soon as possible.
                 </p>
+                <button
+                  onClick={() => setIsSubmitted(false)}
+                  className="bg-rose text-white px-8 py-3 rounded-full text-sm font-medium uppercase tracking-wider hover:bg-black transition-colors"
+                >
+                  Send Another Message
+                </button>
               </motion.div>
             ) : null}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Netlify form — data-netlify tells Netlify to capture submissions */}
+            <form
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
+              {/* Required hidden inputs for Netlify */}
+              <input type="hidden" name="form-name" value="contact" />
+              <input type="hidden" name="subject" value="New enquiry from deedeesglam.com" />
+              <p className="hidden">
+                <input name="bot-field" />
+              </p>
+
               <div className="space-y-2">
                 <label className="text-sm font-medium tracking-wider uppercase text-black/60">Full Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
+                  name="name"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full border-b border-black/20 py-3 bg-transparent focus:outline-none focus:border-gold transition-colors"
                   placeholder="Jane Doe"
                 />
@@ -84,21 +116,23 @@ export function Contact() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium tracking-wider uppercase text-black/60">Email Address</label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
+                    name="email"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full border-b border-black/20 py-3 bg-transparent focus:outline-none focus:border-gold transition-colors"
                     placeholder="jane@example.com"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium tracking-wider uppercase text-black/60">Phone Number</label>
-                  <input 
-                    type="tel" 
+                  <input
+                    type="tel"
+                    name="phone"
                     value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full border-b border-black/20 py-3 bg-transparent focus:outline-none focus:border-gold transition-colors"
                     placeholder="+44 7000 000000"
                   />
@@ -107,9 +141,10 @@ export function Contact() {
 
               <div className="space-y-2">
                 <label className="text-sm font-medium tracking-wider uppercase text-black/60">Service of Interest</label>
-                <select 
+                <select
+                  name="service"
                   value={formData.service}
-                  onChange={(e) => setFormData({...formData, service: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                   className="w-full border-b border-black/20 py-3 bg-transparent focus:outline-none focus:border-gold transition-colors appearance-none"
                 >
                   <option value="General Enquiry">General Enquiry</option>
@@ -123,27 +158,29 @@ export function Contact() {
 
               <div className="space-y-2">
                 <label className="text-sm font-medium tracking-wider uppercase text-black/60">Message</label>
-                <textarea 
+                <textarea
+                  name="message"
                   required
                   rows={4}
                   value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full border-b border-black/20 py-3 bg-transparent focus:outline-none focus:border-gold transition-colors resize-none"
                   placeholder="How can we help you?"
                 ></textarea>
               </div>
 
-              <button 
+              <button
                 type="submit"
-                className="w-full bg-black hover:bg-gold text-white py-4 rounded-full text-sm font-medium uppercase tracking-wider transition-colors mt-4"
+                disabled={isLoading}
+                className="w-full bg-black hover:bg-gold text-white py-4 rounded-full text-sm font-medium uppercase tracking-wider transition-colors mt-4 disabled:opacity-50"
               >
-                Send Message
+                {isLoading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </motion.div>
 
           {/* Right Column - Direct Info */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -163,7 +200,7 @@ export function Contact() {
                     </a>
                   </div>
                 </li>
-                
+
                 <li className="flex items-start gap-6 group">
                   <div className="w-12 h-12 bg-rose/10 text-rose rounded-full flex items-center justify-center shrink-0 group-hover:bg-rose group-hover:text-white transition-colors">
                     <Mail className="w-5 h-5" />
@@ -171,20 +208,18 @@ export function Contact() {
                   <div>
                     <p className="text-sm font-medium tracking-wider uppercase text-black/60 mb-1">Email</p>
                     <a href="mailto:deedeesglam@gmail.com" className="text-xl font-serif text-black hover:text-gold transition-colors">
-                      deedeesglam@gmail.com
+                      ddeesglam@gmail.com
                     </a>
                   </div>
                 </li>
-                
+
                 <li className="flex items-start gap-6 group">
                   <div className="w-12 h-12 bg-rose/10 text-rose rounded-full flex items-center justify-center shrink-0 group-hover:bg-rose group-hover:text-white transition-colors">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-sm font-medium tracking-wider uppercase text-black/60 mb-1">Location</p>
-                    <p className="text-xl font-serif text-black">
-                      East London, UK
-                    </p>
+                    <p className="text-xl font-serif text-black">East London, UK</p>
                     <p className="text-sm text-black/60 mt-2 italic border-l-2 border-gold pl-3">
                       "Based in East London — available for travel across London and surrounding areas."
                     </p>
@@ -215,8 +250,8 @@ export function Contact() {
 
       {/* Bottom CTA Bar */}
       <div className="bg-rose text-center py-8 px-4 relative z-10 mt-auto">
-        <Link 
-          to="/book" 
+        <Link
+          to="/book"
           className="inline-flex items-center gap-2 text-white font-serif text-2xl hover:text-black transition-colors"
         >
           Skip the form and book directly <span className="text-3xl">→</span>
