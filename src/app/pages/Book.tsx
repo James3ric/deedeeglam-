@@ -6,10 +6,10 @@ import "react-day-picker/dist/style.css";
 import { Check, Mail, MessageSquare, Phone, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
-import birthdayImg from "../../imports/soft_glam_2.jpeg";
-import bridalImg from "../../imports/full_glam.jpeg";
-import partyImg from "../../imports/full_glam_2.jpeg";
-import browsImg from "../../imports/brow.jpeg";
+import birthdayImg from "../../imports/soft_glam/soft_glam_2.jpeg";
+import bridalImg from "../../imports/full_glam/full_glam.jpeg";
+import partyImg from "../../imports/full_glam/full_glam_2.jpeg";
+import browsImg from "../../imports/brows/brow.jpeg";
 
 export function Book() {
   const location = useLocation();

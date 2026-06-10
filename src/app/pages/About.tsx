@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { motion } from "motion/react";
 import aboutImg from "../../imports/about_me.jpeg";
-import btsImg from "../../imports/soft_glam_2.jpeg";
+import btsImg from "../../imports/soft_glam/soft_glam_2.jpeg";
 
 export function About() {
   const values = [
